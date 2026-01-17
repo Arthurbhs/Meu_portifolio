@@ -198,19 +198,31 @@ export default function ProjectsSection() {
           </Box>
 
           {/* CARROSSEL */}
-        <Box
+      <Box
   ref={carouselRef}
   sx={{
     display: "flex",
     gap: 4,
-    overflowX: "hidden",
+
+    overflowX: "auto",
     overflowY: "visible",
+
     scrollSnapType: "x mandatory",
-    pb: 6,                // espaço inferior real
-    pt: 2,                // espaço para hover subir
-    minHeight: 520,       // ⭐ ESSENCIAL
+    WebkitOverflowScrolling: "touch",
+    touchAction: "pan-x",
+
+    scrollbarWidth: "none",
+    "&::-webkit-scrollbar": {
+      display: "none",
+    },
+
+    pb: 6,
+    pt: 2,
+    minHeight: 520,
+
   }}
 >
+
 
 
             {projects.map((project, index) => (

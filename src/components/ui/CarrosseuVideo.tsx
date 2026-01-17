@@ -4,6 +4,12 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useRef } from "react";
 import { motion } from "framer-motion";
 
+/* =========================
+   MOTION + MUI
+========================= */
+
+const MotionBox = motion(Box);
+
 const easeOutExpo: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 interface AudiovisualCarouselProps {
@@ -11,10 +17,13 @@ interface AudiovisualCarouselProps {
   videos: string[];
 }
 
+/* =========================
+   ESTILO DOS CARDS
+========================= */
 
 const videoCard = {
-  width: 420,
-  minWidth: 420,
+  width: { xs: 300, sm: 360, md: 420 },
+  minWidth: { xs: 300, sm: 360, md: 420 },
   aspectRatio: "16 / 9",
   borderRadius: "20px",
   overflow: "hidden",
@@ -27,19 +36,10 @@ const videoCard = {
     inset 0 1px 1px rgba(255,255,255,0.25),
     0 25px 60px rgba(0,0,0,0.6)
   `,
-  transition: "all .45s ease",
-  scrollSnapAlign: "start",
-  "&:hover": {
-    transform: "translateY(-8px)",
-    boxShadow: `
-      inset 0 1px 2px rgba(255,255,255,0.35),
-      0 40px 90px rgba(56,189,248,0.45)
-    `,
-  },
 };
 
 /* =========================
-   SETAS (REAPROVEITADAS)
+   SETAS
 ========================= */
 
 const arrowStyle = {
@@ -65,13 +65,16 @@ const arrowStyle = {
   },
 };
 
+/* =========================
+   ANIMAÇÕES
+========================= */
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.9, easeOutExpo },
+    transition: { duration: 0.9, ease: easeOutExpo },
   },
 };
 
@@ -93,7 +96,6 @@ const cardFade = {
   },
 };
 
-
 /* =========================
    COMPONENTE
 ========================= */
@@ -102,7 +104,6 @@ export default function AudiovisualCarousel({
   title = "Produções Audiovisuais",
   videos,
 }: AudiovisualCarouselProps) {
-
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -115,39 +116,34 @@ export default function AudiovisualCarousel({
   };
 
   return (
-    <Box
-      sx={{
-        py: { xs: 2, md: 0 },
-        background:
-          "transparent",
-      }}
-    >
+    <Box sx={{ py: { xs: 4, md: 6 } }}>
       <Container maxWidth="lg">
-      <motion.div
-  variants={fadeUp}
-  initial="hidden"
-  whileInView="visible"
-  viewport={{ once: false, amount: 0.4 }}
->
- <Typography
-     variant="h3"
-        sx={{
-          textAlign: "center",
-          fontWeight: 700,
-          mb: 2,
-          background:
-            "linear-gradient(90deg,#ec4899,#d946ef,#8b5cf6)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-        }}
-  >
-    {title}
-  </Typography>
+        {/* TÍTULO */}
+        <MotionBox
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.4 }}
+        >
+          <Typography
+            variant="h3"
+            sx={{
+              textAlign: "center",
+              fontWeight: 700,
+              mb: 3,
+              background:
+                "linear-gradient(90deg,#ec4899,#d946ef,#8b5cf6)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            {title}
+          </Typography>
+        </MotionBox>
 
-    </motion.div> 
-
+        {/* CARROSSEL */}
         <Box sx={{ position: "relative" }}>
-          {/* SETA ESQUERDA */}
+          {/* SETA ESQUERDA (DESKTOP) */}
           <Box
             onClick={() => scroll("left")}
             sx={{
@@ -163,7 +159,7 @@ export default function AudiovisualCarousel({
             <ArrowBackIosNewIcon fontSize="small" />
           </Box>
 
-          {/* SETA DIREITA */}
+          {/* SETA DIREITA (DESKTOP) */}
           <Box
             onClick={() => scroll("right")}
             sx={{
@@ -179,48 +175,88 @@ export default function AudiovisualCarousel({
             <ArrowForwardIosIcon fontSize="small" />
           </Box>
 
-          {/* CARROSSEL */}
-          <Box
+          {/* LISTA */}
+          <MotionBox
             ref={carouselRef}
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
             sx={{
               display: "flex",
               gap: 4,
-              overflowX: "hidden",
-              overflowY: "visible",
+              overflowX: "auto",
               scrollSnapType: "x mandatory",
+              WebkitOverflowScrolling: "touch",
+              touchAction: "pan-x",
+              scrollbarWidth: "none",
+              "&::-webkit-scrollbar": { display: "none" },
               pb: 6,
               pt: 2,
-              minHeight: 340,
             }}
           >
-           <motion.div
-  variants={staggerContainer}
-  initial="hidden"
-  whileInView="visible"
-  viewport={{ once: false, amount: 0.2 }}
-  style={{ display: "flex", gap: 32 }}
+            {videos.map((src, index) => (
+              <MotionBox
+                key={index}
+                variants={cardFade}
+                sx={{ scrollSnapAlign: "start" }}
+              >
+                <MotionBox
+                  sx={videoCard}
+                  whileHover={{ y: -8 }}
+                  transition={{ duration: 0.35 }}
+                >
+                  <Box
+                    component="iframe"
+                    src={src}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    sx={{
+                      width: "100%",
+                      height: "100%",
+                      border: 0,
+                      pointerEvents: {
+                        xs: "none", // swipe no mobile
+                        md: "auto", // clique no desktop
+                      },
+                    }}
+                  />
+                  {/* OVERLAY MOBILE */}
+<Box
+  onClick={() => window.open(src, "_blank")}
+  sx={{
+    display: { xs: "flex", md: "none" },
+    position: "absolute",
+    inset: 0,
+    zIndex: 2,
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+    background:
+      "linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45))",
+  }}
 >
- {videos.map((src, index) => (
+  <Box
+    sx={{
+      width: 64,
+      height: 64,
+      borderRadius: "50%",
+      background:
+        "linear-gradient(135deg, #ec4848ff, #8f1414ff)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      boxShadow: "0 20px 40px rgba(0,0,0,.6)",
+    }}
+  >
+    ▶
+  </Box>
+</Box>
 
-    <motion.div key={index} variants={cardFade}>
-      <Box sx={videoCard}>
-        <Box
-          component="iframe"
-          src={src}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          sx={{
-            width: "100%",
-            height: "100%",
-            border: 0,
-          }}
-        />
-      </Box>
-    </motion.div>
-  ))}
-</motion.div>
-
-          </Box>
+                </MotionBox>
+              </MotionBox>
+            ))}
+          </MotionBox>
         </Box>
       </Container>
     </Box>

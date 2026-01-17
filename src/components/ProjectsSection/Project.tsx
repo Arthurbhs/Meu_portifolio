@@ -202,19 +202,30 @@ const [selectedArt, setSelectedArt] = useState<{
           </Box>
 
           {/* CARROSSEL */}
-          <Box
-            ref={carouselRef}
-            sx={{
-              display: "flex",
-              gap: 4,
-              overflowX: "hidden",
-              overflowY: "visible",
-              scrollSnapType: "x mandatory",
-              pb: 6,
-              pt: 2,
-              minHeight: 420,
-            }}
-          >
+         <Box
+  ref={carouselRef}
+  sx={{
+    display: "flex",
+    gap: 4,
+
+    overflowX: "auto",        // 🔥 ESSENCIAL
+    overflowY: "visible",
+
+    scrollSnapType: "x mandatory",
+    WebkitOverflowScrolling: "touch",
+    touchAction: "pan-x",
+
+    scrollbarWidth: "none",
+    "&::-webkit-scrollbar": {
+      display: "none",
+    },
+
+    pb: 6,
+    pt: 2,
+    minHeight: 420,
+  }}
+>
+
             {arts.map((art, index) => (
               <motion.div
                 key={art.title}
