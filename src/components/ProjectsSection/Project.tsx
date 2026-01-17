@@ -6,6 +6,8 @@ import { useRef, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import AudiovisualCarousel from "../ui/CarrosseuVideo";
 
+const easeOutExpo: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
 
 const artCard = {
   width: 320,
@@ -309,7 +311,7 @@ const [selectedArt, setSelectedArt] = useState<{
     <motion.div
       initial={{ scale: 0.92, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 0.45, ease: "easeOut" }}
+      transition={{ duration: 0.45, ease: easeOutExpo }}
       onClick={(e) => e.stopPropagation()}
       style={{
         maxWidth: "92vw",

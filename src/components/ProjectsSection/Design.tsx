@@ -2,13 +2,14 @@ import { Box, Container, Grid, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import ImageButtonAlbum from "../../components/ui/ImageButton";
 import AudiovisualCarousel from "../ui/CarrosseuVideo";
+const easeOutExpo: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.9, ease: "easeOut" },
+    transition: { duration: 0.9, easeOutExpo },
   },
 };
 
@@ -139,7 +140,7 @@ overflowY: "visible",
         {/* GRID */}
         <Grid container spacing={4}>
           {visualProjects.map((project, index) => (
-            <Grid item xs={12} sm={6} md={3} key={project.title}>
+            <Grid size={{ xs:12, sm:6, md:3}} key={project.title}>
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}

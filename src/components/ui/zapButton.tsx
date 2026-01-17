@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import { motion } from "framer-motion";
+const easeOutExpo: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 interface ZapButtonProps {
   phone: string; // formato: 55DDXXXXXXXXX
@@ -19,7 +20,7 @@ export default function ZapButton({
     <motion.div
       initial={{ opacity: 0, scale: 0.7 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
+      transition={{ duration: 0.8, ease: easeOutExpo }}
       style={{
         position: "fixed",
         right: 24,

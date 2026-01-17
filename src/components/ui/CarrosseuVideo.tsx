@@ -4,6 +4,8 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useRef } from "react";
 import { motion } from "framer-motion";
 
+const easeOutExpo: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
 interface AudiovisualCarouselProps {
   title?: string;
   videos: string[];
@@ -69,7 +71,7 @@ const fadeUp = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.9, ease: "easeOut" },
+    transition: { duration: 0.9, easeOutExpo },
   },
 };
 
@@ -87,7 +89,7 @@ const cardFade = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, ease: "easeOut" },
+    transition: { duration: 0.7, ease: easeOutExpo },
   },
 };
 
